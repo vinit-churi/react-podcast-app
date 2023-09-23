@@ -1,0 +1,9 @@
+fist of all lets create basic components:
+   - navbar
+   - hero section
+   - testimonial section
+   - listen to best podcast on app, will just create a static layout for now (will be needing to fetch some podcast here...).
+   - Starting a podcast section and some other sections
+   - dashboard page create podcast page. on which podcast will be created.
+   - also add feature to upload the audio file.
+   
