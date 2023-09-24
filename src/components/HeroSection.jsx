@@ -8,7 +8,7 @@ import profileFiveImg from "../assets/images/profile5.jpeg";
 const HeroSection = () => {
   return (
     <div className="bg-primary h-[600px] flex">
-      <div className="flex-[0_0_300px] self-end">
+      <div className="flex-[0_0_300px] self-end max-[1108px]:flex-[0_0_0px] ">
         <img src={womanImage} className="" alt="" />
       </div>
       <div className="flex-[1_1_auto] self-end px-8">
@@ -20,10 +20,10 @@ const HeroSection = () => {
           a quo quaerat facilis aspernatur necessitatibus harum ab
           reprehenderit.
         </p>
-        <button className="font-primary bg-secondaryVariant px-4 py-2 rounded-md outline-none border-none text-purpleTint mx-auto my-8 block text-xl">
+        <button className="font-primary max-[452px]:mb-32 bg-secondaryVariant px-4 py-2 rounded-md outline-none border-none text-purpleTint mx-auto my-8 block text-xl">
           Browse Podcast
         </button>
-        <div className="mt-32 mb-4 flex justify-center content-center">
+        <div className="mt-32 mb-4 flex justify-center content-center max-[452px]:hidden">
           <div className="grid w-min gap-3 grid-cols-[repeat(7,20px)]">
             <img
               src={profileOneImg}
@@ -59,7 +59,7 @@ const HeroSection = () => {
           </p>
         </div>
       </div>
-      <div className="flex-[0_0_max-content] self-center">
+      <div className="flex-[0_0_max-content] max-[1108px]:flex-[0_0_0px] self-center">
         <img
           src={micImage}
           className="h-auto w-[230px] origin-right scale-125"

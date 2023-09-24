@@ -59,7 +59,7 @@ const PodcastStaticPreview = () => {
       <h2 className="text-center font-primary text-4xl text-secondary tracking-wider">
         Listen the best Podcasts on the internet
       </h2>
-      <div className="flex mx-auto justify-center font-primary text-xl my-10">
+      <div className="flex mx-auto justify-center font-primary text-xl my-10 flex-wrap">
         <button
           onClick={() => handleOptionChange("All")}
           className={`mx-4 px-3 py-2 ${
@@ -105,7 +105,7 @@ const PodcastStaticPreview = () => {
           Health
         </button>
       </div>
-      <div className="flex w-[90%] mx-auto justify-evenly">
+      <div className="flex w-[90%] mx-auto justify-evenly gap-4 flex-wrap">
         {cardsData.map((card) => (
           <div key={card.id} className="p-3 rounded-xl bg-white w-[300px]">
             <div className="flex justify-between">

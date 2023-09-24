@@ -3,8 +3,12 @@ const NavBar = () => {
   return (
     <div className="bg-primary text-primaryLight flex font-primary h-20">
       <div className="flex items-center gap-2 flex-[1_1_auto]">
-        <img src={Logo} alt="logo" className="h-[40px] ml-auto" />
-        <span className="font-bold text-4xl tracking-widest mr-[30%]">
+        <img
+          src={Logo}
+          alt="logo"
+          className="h-[40px] max-[584px]:ml-2 ml-auto"
+        />
+        <span className="font-bold text-4xl tracking-widest mr-[30%] max-[671px]:mr-auto max-[671px]:ml-2 max-[584px]:hidden ">
           Knowledge hub
         </span>
       </div>
