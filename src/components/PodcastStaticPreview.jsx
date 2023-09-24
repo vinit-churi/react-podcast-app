@@ -1,7 +1,7 @@
 import previewOne from "../assets/images/static-episode-preview-01.webp";
-import previewTwo from "../assets/images/static-episode-preview-02.jpg";
+import previewTwo from "../assets/images/static-episode-preview-02.webp";
 import previewThree from "../assets/images/static-episode-preview-03.webp";
-import previewFour from "../assets/images/static-episode-preview-04.jpg";
+import previewFour from "../assets/images/static-episode-preview-04.webp";
 import { useState } from "react";
 
 const staticCards = [
