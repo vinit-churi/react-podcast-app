@@ -1,24 +1,24 @@
-import previewOne from "../assets/images/static-episode-preview-01.jpg";
+import previewOne from "../assets/images/static-episode-preview-01.webp";
 import previewTwo from "../assets/images/static-episode-preview-02.jpg";
-import previewThree from "../assets/images/static-episode-preview-03.jpg";
+import previewThree from "../assets/images/static-episode-preview-03.webp";
 import previewFour from "../assets/images/static-episode-preview-04.jpg";
 import { useState } from "react";
 
 const staticCards = [
   {
-    topic: ["Design", "Development", "Marketing"],
+    topic: ["Health", "Development", "Marketing"],
     episode: "Episode 1",
     title: "How to design a website",
     time: "30 min",
-    id: "someId1",
+    id: "123",
     img: previewOne,
   },
   {
-    topic: ["Design", "Development"],
+    topic: ["Design", "Development", "Health"],
     episode: "Episode 22",
     title: "Is Newton a hacker?",
     time: "30 min",
-    id: "someId2",
+    id: "456",
     img: previewTwo,
   },
   {
@@ -26,15 +26,15 @@ const staticCards = [
     episode: "Episode 1",
     title: "How to design a website",
     time: "30 min",
-    id: "someId3",
+    id: "769",
     img: previewThree,
   },
   {
-    topic: ["Health"],
+    topic: ["Health", "Marketing", "Design"],
     episode: "Episode 12",
     title: "How important is sleep?",
     time: "30 min",
-    id: "someId4",
+    id: "10112",
     img: previewFour,
   },
 ];
@@ -49,7 +49,7 @@ const PodcastStaticPreview = () => {
     }
     setCardsData(
       staticCards.filter(
-        (data) => currentOption === "All" || data.topic.includes(option)
+        (data) => option === "All" || data.topic.includes(option)
       )
     );
   }
@@ -62,45 +62,44 @@ const PodcastStaticPreview = () => {
       <div className="flex mx-auto justify-center font-primary text-xl my-10">
         <button
           onClick={() => handleOptionChange("All")}
-          className={`mx-4 ${
-            currentOption === "All" &&
-            "bg-secondary px-3 py-2 rounded-md text-greenTint"
+          className={`mx-4 px-3 py-2 ${
+            currentOption === "All" && "bg-secondary rounded-md text-greenTint"
           }`}
         >
           All
         </button>
         <button
           onClick={() => handleOptionChange("Design")}
-          className={`mx-4 ${
+          className={`mx-4 px-3 py-2 ${
             currentOption === "Design" &&
-            "bg-secondary px-3 py-2 rounded-md text-greenTint"
+            "bg-secondary rounded-md text-greenTint"
           }`}
         >
           Design
         </button>
         <button
           onClick={() => handleOptionChange("Development")}
-          className={`mx-4 ${
+          className={`mx-4 px-3 py-2 ${
             currentOption === "Development" &&
-            "bg-secondary px-3 py-2 rounded-md text-greenTint"
+            "bg-secondary rounded-md text-greenTint"
           }`}
         >
           Development
         </button>
         <button
           onClick={() => handleOptionChange("Marketing")}
-          className={`mx-4 ${
+          className={`mx-4 px-3 py-2 ${
             currentOption === "Marketing" &&
-            "bg-secondary px-3 py-2 rounded-md text-greenTint"
+            "bg-secondary rounded-md text-greenTint"
           }`}
         >
           Marketing
         </button>
         <button
           onClick={() => handleOptionChange("Health")}
-          className={`mx-4 ${
+          className={`mx-4 px-3 py-2 ${
             currentOption === "Health" &&
-            "bg-secondary px-3 py-2 rounded-md text-greenTint"
+            "bg-secondary rounded-md text-greenTint"
           }`}
         >
           Health
