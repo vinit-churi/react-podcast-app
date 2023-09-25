@@ -52,6 +52,7 @@ export const podcastApi = createApi({
         console.log(response, "this is the response");
         return response.data;
       },
+      invalidatesTags: ["Podcasts"],
     }),
     getPodcast: builder.query({
       queryFn: async (podcastId) => {
@@ -72,6 +73,7 @@ export const podcastApi = createApi({
         console.log(response, "this is the response");
         return response.data;
       },
+      providesTags: ["Podcasts"],
     }),
     getUserPodcasts: builder.query({
       queryFn: async (userId) => {
@@ -92,6 +94,7 @@ export const podcastApi = createApi({
         console.log(response, "this is the response");
         return response.data;
       },
+      providesTags: ["Podcasts"],
     }),
     getAllPodcasts: builder.query({
       queryFn: async () => {
@@ -112,6 +115,7 @@ export const podcastApi = createApi({
         console.log(response, "this is the response");
         return response.data;
       },
+      providesTags: ["Podcasts"],
     }),
     addToSubscription: builder.mutation({
       queryFn: async (userId, podcastId) => {
@@ -136,6 +140,7 @@ export const podcastApi = createApi({
         console.log(response, "this is the response");
         return response.data;
       },
+      invalidatesTags: ["subscriptions"],
     }),
     removePodcastFromSubscription: builder.mutation({
       queryFn: async (userId, podcastId) => {
@@ -153,6 +158,7 @@ export const podcastApi = createApi({
           return { error: error.message };
         }
       },
+      invalidatesTags: ["subscriptions"],
     }),
     getUserSubscriptions: builder.query({
       queryFn: async (userId) => {
@@ -169,6 +175,11 @@ export const podcastApi = createApi({
           return { error: error.message };
         }
       },
+      transformResponse: (response) => {
+        console.log(response, "this is the response");
+        return response.data;
+      },
+      providesTags: "subscriptions",
     }),
   }),
 });
