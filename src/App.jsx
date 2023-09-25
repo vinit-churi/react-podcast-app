@@ -8,6 +8,8 @@ import PodcastDetail from "@components/PodcastDetail";
 import Favorites from "@components/Favorites";
 import NotFound from "@components/NotFound";
 import Protected from "@components/Protected";
+import UserPodcasts from "@components/UserPodcasts";
+import UserSubscriptions from "@components/UserSubscriptions";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -42,6 +44,27 @@ const router = createBrowserRouter([
             <Favorites />
           </Protected>
         ),
+      },
+      {
+        path: "/user",
+        children: [
+          {
+            path: "podcasts",
+            element: (
+              <Protected>
+                <UserPodcasts />
+              </Protected>
+            ),
+          },
+          {
+            path: "subscriptions",
+            element: (
+              <Protected>
+                <UserSubscriptions />
+              </Protected>
+            ),
+          },
+        ],
       },
       {
         path: "*",
