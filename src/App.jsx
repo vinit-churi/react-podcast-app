@@ -7,7 +7,7 @@ import Podcasts from "@components/Podcasts";
 import PodcastDetail from "@components/PodcastDetail";
 import Favorites from "@components/Favorites";
 import NotFound from "@components/NotFound";
-
+import Protected from "@components/Protected";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,7 +19,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: (
+          <Protected>
+            <Dashboard />
+          </Protected>
+        ),
       },
       {
         path: "/podcasts",
@@ -33,7 +37,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/favorites",
-        element: <Favorites />,
+        element: (
+          <Protected>
+            <Favorites />
+          </Protected>
+        ),
       },
       {
         path: "*",

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import womanImage from "../assets/images/headphone-woman.png";
 import micImage from "../assets/images/big-mic.png";
 import profileOneImg from "../assets/images/profile1.jpeg";
@@ -6,6 +7,7 @@ import profileThreeImg from "../assets/images/profile3.jpeg";
 import profileFourImg from "../assets/images/profile4.jpeg";
 import profileFiveImg from "../assets/images/profile5.jpeg";
 const HeroSection = () => {
+  const navigate = useNavigate();
   return (
     <div className="bg-primary h-[600px] flex">
       <div className="flex-[0_0_300px] self-end max-[1108px]:flex-[0_0_0px] ">
@@ -20,7 +22,10 @@ const HeroSection = () => {
           a quo quaerat facilis aspernatur necessitatibus harum ab
           reprehenderit.
         </p>
-        <button className="font-primary max-[452px]:mb-32 bg-secondaryVariant px-4 py-2 rounded-md outline-none border-none text-purpleTint mx-auto my-8 block text-xl">
+        <button
+          onClick={() => navigate("/podcasts")}
+          className="font-primary max-[452px]:mb-32 bg-secondaryVariant px-4 py-2 rounded-md outline-none border-none text-purpleTint mx-auto my-8 block text-xl ease-in-out duration-300 hover:scale-105"
+        >
           Browse Podcast
         </button>
         <div className="mt-32 mb-4 flex justify-center content-center max-[452px]:hidden">

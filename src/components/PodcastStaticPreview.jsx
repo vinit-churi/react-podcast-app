@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import previewOne from "../assets/images/static-episode-preview-01.webp";
 import previewTwo from "../assets/images/static-episode-preview-02.webp";
 import previewThree from "../assets/images/static-episode-preview-03.webp";
@@ -39,6 +40,7 @@ const staticCards = [
   },
 ];
 const PodcastStaticPreview = () => {
+  const navigate = useNavigate();
   const [currentOption, setCurrentOption] = useState("All");
   const [cardsData, setCardsData] = useState(staticCards);
   function handleOptionChange(option) {
@@ -127,7 +129,10 @@ const PodcastStaticPreview = () => {
           </div>
         ))}
       </div>
-      <button className="block mx-auto mt-12 px-4 py-2 text-xl font-primary text-greenTint bg-secondary rounded-md">
+      <button
+        onClick={() => navigate("/podcasts")}
+        className="block mx-auto mt-12 px-4 py-2 text-xl font-primary text-greenTint bg-secondary rounded-md ease-in-out duration-300 hover:scale-105"
+      >
         Explore more
       </button>
     </div>
