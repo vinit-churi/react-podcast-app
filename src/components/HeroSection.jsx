@@ -64,10 +64,10 @@ const HeroSection = () => {
           </p>
         </div>
       </div>
-      <div className="flex-[0_0_max-content] max-[1108px]:flex-[0_0_0px] self-center">
+      <div className="flex-[0_0_300px] max-[1108px]:flex-[0_0_0px] self-center">
         <img
           src={micImage}
-          className="h-auto w-[230px] origin-right scale-125"
+          className="h-auto w-[230px] origin-right scale-125 block mr-0 ml-auto"
           alt=""
         />
       </div>
