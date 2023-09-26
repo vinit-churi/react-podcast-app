@@ -23,7 +23,7 @@ const NavBar = () => {
           alt="logo"
           className="h-[40px] max-[584px]:ml-2 ml-auto"
         />
-        <span className="font-bold text-4xl tracking-widest mr-[30%] max-[671px]:mr-auto max-[671px]:ml-2 max-[584px]:hidden ">
+        <span className="font-bold text-4xl tracking-widest mr-[20%] min-[1440px]:mr-auto max-[671px]:mr-auto max-[671px]:ml-2 max-[584px]:hidden ">
           Knowledge hub
         </span>
       </div>
