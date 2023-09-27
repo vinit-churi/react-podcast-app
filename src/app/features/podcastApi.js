@@ -53,20 +53,56 @@ export const podcastApi = createApi({
       },
       invalidatesTags: ["Podcasts"],
     }),
-    getPodcast: builder.query({
+    getPodcastEpisodes: builder.query({
       queryFn: async (podcastId) => {
         try {
-          console.log(podcastId);
+          const docRef = collection(db, "episodes");
+          const podcastQuery = query(
+            docRef,
+            where("podcastId", "==", podcastId)
+          );
+          const querySnapshot = await getDocs(podcastQuery);
+          let result = [];
+          querySnapshot.forEach((doc) => {
+            result.push({ id: doc.id, ...doc.data() });
+          });
+          return { data: result };
+        } catch (error) {
+          return { error: error.message };
+        }
+      },
+    }),
+    getPodcast: builder.query({
+      queryFn: async (podcastId) => {
+        const data = {
+          podcast: [],
+          episodes: [],
+        };
+        try {
           const docRef = doc(db, "podcasts", podcastId);
           const docSnap = await getDoc(docRef);
-          console.log(docSnap, "this is the docSnap");
           if (docSnap.exists()) {
-            console.log(docSnap.data(), "this is the docSnap data");
-            return docSnap.data();
+            data.podcast = docSnap.data();
           }
         } catch (error) {
           return { error: error.message };
         }
+        try {
+          const docRef = collection(db, "episodes");
+          const podcastQuery = query(
+            docRef,
+            where("podcastId", "==", podcastId)
+          );
+          const querySnapshot = await getDocs(podcastQuery);
+          let result = [];
+          querySnapshot.forEach((doc) => {
+            result.push({ id: doc.id, ...doc.data() });
+          });
+          data.episodes = result;
+        } catch (error) {
+          return { error: error.message };
+        }
+        return { data: data };
       },
       transformResponse: (response) => {
         console.log(response, "this is the response");
@@ -77,14 +113,15 @@ export const podcastApi = createApi({
     getUserPodcasts: builder.query({
       queryFn: async (userId) => {
         try {
+          console.log("is this executing", userId);
           const docRef = collection(db, "podcasts");
           const podcastQuery = query(docRef, where("createdBy", "==", userId));
-          const docSnap = await getDoc(podcastQuery);
-          console.log(docSnap, "this is the docSnap");
-          if (docSnap.exists()) {
-            console.log(docSnap.data(), "this is the docSnap data");
-            return docSnap.data();
-          }
+          const querySnapshot = await getDocs(podcastQuery);
+          const result = [];
+          querySnapshot.forEach((doc) => {
+            result.push({ id: doc.id, ...doc.data() });
+          });
+          return { data: result };
         } catch (error) {
           return { error: error.message };
         }
@@ -103,9 +140,9 @@ export const podcastApi = createApi({
           const querySnapshot = await getDocs(docRef);
           let result = [];
           querySnapshot.forEach((doc) => {
-            result.push(doc.data());
+            result.push({ id: doc.id, ...doc.data() });
           });
-          return result;
+          return { data: result };
         } catch (error) {
           return { error: error.message };
         }
@@ -166,7 +203,7 @@ export const podcastApi = createApi({
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             const docData = docSnap.data();
-            return docData.subscriptions;
+            return { data: docData.subscriptions };
           } else {
             return { error: "No subscriptions found" };
           }
@@ -189,4 +226,8 @@ export const {
   useGetAllPodcastsQuery,
   useGetPodcastQuery,
   useGetUserPodcastsQuery,
+  useGetUserSubscriptionsQuery,
+  useAddToSubscriptionMutation,
+  useRemovePodcastFromSubscriptionMutation,
+  useGetPodcastEpisodesQuery,
 } = podcastApi;

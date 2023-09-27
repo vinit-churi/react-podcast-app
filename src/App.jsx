@@ -29,8 +29,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/podcasts",
-        element: <Podcasts />,
         children: [
+          {
+            index: true,
+            element: <Podcasts />,
+          },
           {
             path: ":podcastId",
             element: <PodcastDetail />,
