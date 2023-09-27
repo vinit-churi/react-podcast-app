@@ -4,6 +4,7 @@ import { podcastApi } from "@app/features/podcastApi";
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    [podcastApi.reducerPath]: podcastApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(podcastApi.middleware),

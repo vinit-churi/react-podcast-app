@@ -17,14 +17,14 @@ export const podcastApi = createApi({
   baseQuery: fakeBaseQuery(),
   endpoints: (builder) => ({
     createPodcast: builder.mutation({
-      queryFn: async (userId, data) => {
+      queryFn: async (data) => {
         try {
           const docData = {
-            createdBy: userId,
             ...data,
           };
           const docRef = await addDoc(collection(db, "podcasts"), docData);
           console.log(docRef, "this is the docRef");
+          return { data: docRef.id };
         } catch (error) {
           return { error: error.message };
         }
@@ -36,10 +36,9 @@ export const podcastApi = createApi({
       invalidatesTags: ["Podcasts"],
     }),
     addEpisodeToPodcast: builder.mutation({
-      queryFn: async (userId, data) => {
+      queryFn: async (data) => {
         try {
           const docData = {
-            createdBy: userId,
             ...data,
           };
           const docRef = await addDoc(collection(db, "episodes"), docData);

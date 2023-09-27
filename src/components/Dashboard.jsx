@@ -1,12 +1,21 @@
 import { useState, useRef } from "react";
 import notify from "@utils/notify";
 import { BiImageAdd } from "react-icons/bi";
+import { uploadFile } from "@utils/storage";
 import { RiDeleteBin6Fill } from "react-icons/ri";
+import { useCreatePodcastMutation } from "@app/features/podcastApi";
+import { useSelector } from "react-redux";
+import { selectUser } from "@app/features/authSlice";
+import LoadingModal from "@components/LoadingModal";
+import { createPortal } from "react-dom";
 const Dashboard = () => {
+  const user = useSelector(selectUser);
+  const [formSubmitting, setFormSubmitting] = useState(false);
+  const [createPodcast, { isLoading }] = useCreatePodcastMutation();
+  console.log(formSubmitting, isLoading);
   const imageRef = useRef(null);
   const [previewImg, setPreviewImg] = useState(null);
   const [formData, setFormData] = useState({
-    image: "",
     name: "",
     description: "",
     tagLine: "",
@@ -35,15 +44,6 @@ const Dashboard = () => {
     reader.readAsDataURL(file);
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (!previewImg) {
-      notify("Please select an image", "❗");
-      return;
-    }
-    console.log(formData);
-  }
-
   function handleRemoveButtonClick(e) {
     e.preventDefault();
     // stop the click event from bubbling up to the parent label
@@ -51,12 +51,58 @@ const Dashboard = () => {
     imageRef.current.value = "";
     setPreviewImg(null);
   }
+  function clearForm() {
+    setFormData({
+      name: "",
+      description: "",
+      tagLine: "",
+      category: "",
+    });
+    imageRef.current.value = "";
+    setPreviewImg(null);
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!previewImg) {
+      notify("Please select an image", "❗");
+      return;
+    }
+    try {
+      setFormSubmitting(true);
+      const imgUrl = await uploadFile(imageRef.current.files[0]);
+      console.log(imgUrl);
+      console.log(formData);
+      try {
+        await createPodcast({
+          name: formData.name,
+          description: formData.description,
+          tagLine: formData.tagLine,
+          category: formData.category,
+          image: imgUrl,
+          createdBy: user.uid,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      clearForm();
+      setFormSubmitting(false);
+    } catch (err) {
+      console.log(err);
+      setFormSubmitting(false);
+      notify("Error while uploading image", "❗");
+      clearForm();
+      return;
+    }
+  }
 
   return (
-    <div className="bg-primary">
+    <div className="bg-primary px-4">
+      {formSubmitting &&
+        createPortal(<LoadingModal />, document.getElementById("portal-root"))}
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-[90%] gap-2 mx-auto p-6 max-w-[500px] bg-white rounded-md shadow-md"
+        className="grid grid-cols-[90%] gap-2 mx-auto p-6 max-w-[500px] bg-white rounded-md shadow-md font-primary text-lg text-secondary"
       >
         <label
           htmlFor="image"
@@ -93,53 +139,62 @@ const Dashboard = () => {
             <BiImageAdd className="text-9xl" />
           )}
         </label>
-        <label htmlFor="name">
+        <label htmlFor="name" className="block">
           Name
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-          />
         </label>
-        <label htmlFor="description">
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleInputChange}
+          required
+          className="rounded-lg border-2 border-primaryDark p-2"
+        />
+        <label htmlFor="description" className="block">
           Description
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            required
-          />
         </label>
-        <label htmlFor="tagLine">
+        <textarea
+          id="description"
+          name="description"
+          value={formData.description}
+          onChange={handleInputChange}
+          required
+          className="rounded-lg border-2 border-primaryDark p-2"
+        />
+        <label htmlFor="tagLine" className="block">
           Tag Line
-          <input
-            type="text"
-            id="tagLine"
-            name="tagLine"
-            value={formData.tagLine}
-            onChange={handleInputChange}
-            required
-          />
         </label>
-        <label htmlFor="category">
+        <input
+          type="text"
+          id="tagLine"
+          name="tagLine"
+          value={formData.tagLine}
+          onChange={handleInputChange}
+          required
+          className="rounded-lg border-2 border-primaryDark p-2"
+        />
+        <label htmlFor="category" className="block">
           Category
-          <select
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleInputChange}
-          >
-            <option value="">Select a category</option>
-            <option value="category1">Category 1</option>
-            <option value="category2">Category 2</option>
-            <option value="category3">Category 3</option>
-          </select>
         </label>
-        <button type="submit">Submit</button>
+        <select
+          id="category"
+          name="category"
+          value={formData.category}
+          onChange={handleInputChange}
+          className="rounded-lg border-2 border-primaryDark p-2"
+        >
+          <option value="">Select a category</option>
+          <option value="category1">Category 1</option>
+          <option value="category2">Category 2</option>
+          <option value="category3">Category 3</option>
+        </select>
+        <button
+          className="rounded-lg border-2 border-primaryDark p-2"
+          type="submit"
+        >
+          Submit
+        </button>
       </form>
     </div>
   );

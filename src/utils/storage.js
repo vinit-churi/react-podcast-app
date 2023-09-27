@@ -1,9 +1,13 @@
 import { storage } from "@src/firebase.js";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 export function uploadFile(file) {
   return new Promise((resolve, reject) => {
-    const storageRef = ref(storage, `images/${file.name}`);
-    const uploadTask = uploadBytes(storageRef, file);
+    const timestamp = Date.now();
+    const fileName = `${timestamp}_${file.name}`; // Append timestamp to file name
+    console.log(fileName);
+    const storageRef = ref(storage, `images/${fileName}`);
+    console.log(storageRef);
+    const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
       "state_changed",
       (snapshot) => {
