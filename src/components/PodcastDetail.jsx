@@ -19,7 +19,7 @@ const PodcastDetail = () => {
     );
   }
   return (
-    <div className="min-h-screen grid grid-cols-[350px_auto]">
+    <div className="min-h-screen grid grid-cols-[350px_auto] max-[930px]:grid-cols-[300px_auto] max-[800px]:grid-cols-[100%]">
       <div className="bg-secondary">
         {user && user.uid === data?.podcast.createdBy && (
           <button
@@ -31,7 +31,7 @@ const PodcastDetail = () => {
           </button>
         )}
         <div
-          className={`mx-auto mt-20 w-[80%] h-[250px] ${
+          className={`mx-auto mt-20 max-[800px]:mt-4 w-[80%] h-[250px] ${
             !data && "animate-pulse"
           } rounded-xl bg-primary`}
         >
@@ -58,7 +58,7 @@ const PodcastDetail = () => {
           {data && data.podcast.description}
         </p>
         <div className="flex justify-center items-center gap-4 mt-4">
-          <button className="bg-primary hover:scale-110 ease-in-out duration-300 text-white px-4 py-2 rounded-lg">
+          <button className="bg-primary hover:scale-110 ease-in-out duration-300 text-white px-4 py-2 rounded-lg max-[800px]:mb-6">
             Subscribe
           </button>
           {/* <button className="bg-primary hover:scale-110 ease-in-out duration-300 text-white px-4 py-2 rounded-lg">
@@ -76,7 +76,7 @@ const PodcastDetail = () => {
               <EpisodeCard
                 data={episode}
                 key={episode.id}
-                index={index < 10 ? `0${index}` : `${index}`}
+                index={index < 10 ? `0${index + 1}` : `${index + 1}`}
               />
             ))
           ) : (

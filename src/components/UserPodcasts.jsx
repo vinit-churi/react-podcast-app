@@ -14,7 +14,7 @@ const UserPodcasts = () => {
   } = useGetUserPodcastsQuery(user?.uid);
   console.log(podcasts, isLoading, error);
   return (
-    <div>
+    <div className="min-h-[calc(100vh-130px)]">
       <h1 className="font-primary text-center text-5xl mt-12">My Podcasts</h1>
       <p className="font-primary text-center text-base text-slate-400">
         Available on your favorite app.
