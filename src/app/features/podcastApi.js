@@ -42,7 +42,8 @@ export const podcastApi = createApi({
             ...data,
           };
           const docRef = await addDoc(collection(db, "episodes"), docData);
-          console.log(docRef, "this is the docRef");
+          console.log(docRef.id, "episode uploaded");
+          return { data: docRef.id };
         } catch (error) {
           return { error: error.message };
         }

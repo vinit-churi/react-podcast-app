@@ -10,6 +10,7 @@ import NotFound from "@components/NotFound";
 import Protected from "@components/Protected";
 import UserPodcasts from "@components/UserPodcasts";
 import UserSubscriptions from "@components/UserSubscriptions";
+import AddEpisode from "@components/AddEpisode";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -36,7 +37,20 @@ const router = createBrowserRouter([
           },
           {
             path: ":podcastId",
-            element: <PodcastDetail />,
+            children: [
+              {
+                index: true,
+                element: <PodcastDetail />,
+              },
+              {
+                path: "add-episode",
+                element: (
+                  <Protected>
+                    <AddEpisode />
+                  </Protected>
+                ),
+              },
+            ],
           },
         ],
       },

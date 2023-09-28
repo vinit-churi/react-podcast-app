@@ -1,25 +1,26 @@
 import { useState, useRef } from "react";
 import notify from "@utils/notify";
+import { FaFileAudio } from "react-icons/fa";
 import { BiImageAdd } from "react-icons/bi";
 import { uploadFile } from "@utils/storage";
 import { RiDeleteBin6Fill } from "react-icons/ri";
-import { useCreatePodcastMutation } from "@app/features/podcastApi";
+import { useAddEpisodeToPodcastMutation } from "@app/features/podcastApi";
 import { useSelector } from "react-redux";
 import { selectUser } from "@app/features/authSlice";
 import LoadingModal from "@components/LoadingModal";
 import { createPortal } from "react-dom";
-const Dashboard = () => {
+import { useParams } from "react-router-dom";
+const AddEpisode = () => {
+  const { podcastId } = useParams();
   const user = useSelector(selectUser);
   const [formSubmitting, setFormSubmitting] = useState(false);
-  const [createPodcast, { isLoading }] = useCreatePodcastMutation();
+  const [addEpisode, { isLoading }] = useAddEpisodeToPodcastMutation();
   console.log(formSubmitting, isLoading);
-  const imageRef = useRef(null);
-  const [previewImg, setPreviewImg] = useState(null);
+  const audioRef = useRef(null);
+  const [previewAudio, setPreviewAudio] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    tagLine: "",
-    category: "",
   });
 
   function handleInputChange(e) {
@@ -30,56 +31,60 @@ const Dashboard = () => {
     }));
   }
 
-  function handleImageChange(e) {
+  function handleAudioInput(e) {
+    console.log("is handleAudioINput method running?");
+  }
+
+  function handleAudioChange(e) {
+    console.log("is handleAudioChange method running?");
     const file = e.target.files[0];
+    console.log(file);
     if (!file) {
-      setPreviewImg(null);
+      setPreviewAudio(null);
       return;
     }
     const reader = new FileReader();
     reader.onload = (event) => {
       const dataURL = event.target.result;
-      setPreviewImg(dataURL);
+      setPreviewAudio(dataURL);
     };
     reader.readAsDataURL(file);
   }
 
   function handleRemoveButtonClick(e) {
+    console.log("is this method running?");
     e.preventDefault();
     // stop the click event from bubbling up to the parent label
     e.stopPropagation();
-    imageRef.current.value = "";
-    setPreviewImg(null);
+    audioRef.current.value = "";
+    setPreviewAudio(null);
   }
   function clearForm() {
     setFormData({
       name: "",
       description: "",
-      tagLine: "",
-      category: "",
     });
-    imageRef.current.value = "";
-    setPreviewImg(null);
+    audioRef.current.src = "";
+    setPreviewAudio(null);
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!previewImg) {
-      notify("Please select an image", "❗");
+    if (!previewAudio) {
+      notify("Please select an audio file", "❗");
       return;
     }
     try {
       setFormSubmitting(true);
-      const imgUrl = await uploadFile(imageRef.current.files[0]);
-      console.log(imgUrl);
+      const audioUrl = await uploadFile(audioRef.current.files[0]);
+      console.log(audioUrl);
       console.log(formData);
       try {
-        await createPodcast({
+        await addEpisode({
+          podcastId: podcastId,
           name: formData.name,
           description: formData.description,
-          tagLine: formData.tagLine,
-          category: formData.category,
-          image: imgUrl,
+          audio: audioUrl,
           createdBy: user.uid,
         });
       } catch (err) {
@@ -90,14 +95,14 @@ const Dashboard = () => {
     } catch (err) {
       console.log(err);
       setFormSubmitting(false);
-      notify("Error while uploading image", "❗");
+      notify("Error while uploading audio", "❗");
       clearForm();
       return;
     }
   }
 
   return (
-    <div className="bg-primary px-4">
+    <div className="bg-primary px-4 min-h-[calc(100vh-290px)]">
       {formSubmitting &&
         createPortal(
           <LoadingModal message={"few more seconds"} />,
@@ -108,42 +113,46 @@ const Dashboard = () => {
         className="grid grid-cols-[90%] gap-2 mx-auto p-6 max-w-[500px] bg-white rounded-md shadow-md font-primary text-lg text-secondary"
       >
         <label
-          htmlFor="image"
+          htmlFor="audio"
           className={`h-52 w-52 flex items-center justify-center relative before:hidden hover:before:flex bg-greenTint rounded-md cursor-pointer ${
-            previewImg &&
-            "before:bg-secondary/75 before:absolute before:bg-primaryDark before:text-white before:font-bold before:text-2xl before:items-center before:justify-center before:rounded-md before:h-full before:w-full before:cursor-pointer before:font-primary before:content-['']"
+            previewAudio &&
+            "before:bg-secondary/75 w-full h-[56px] self-end rounded-bl-3xl rounded-br-3xl before:absolute before:bg-primaryDark before:text-white before:font-bold before:text-2xl before:items-center before:justify-center before:rounded-md before:h-full before:w-full before:cursor-pointer before:font-primary before:content-['']"
           } `}
         >
-          {previewImg && (
+          {previewAudio && (
             <button
               type="button"
-              className="absolute top-0 right-0 bg-primaryDark/75 rounded-full p-1 m-1"
+              className={`absolute top-0 bottom-0 my-auto right-[-50px] bg-primaryDark/75 rounded-full p-1 m-1 ${"bg-red"}`}
               onClick={handleRemoveButtonClick}
             >
-              <RiDeleteBin6Fill className="text-white text-2xl" />
+              <RiDeleteBin6Fill className="text-red-500 text-2xl" />
             </button>
           )}
           <input
             className="hidden"
             type="file"
-            id="image"
-            name="image"
-            accept="image/*"
-            onChange={handleImageChange}
-            ref={imageRef}
+            id="audio"
+            name="audio"
+            accept="audio/*"
+            onChange={handleAudioChange}
+            onInput={handleAudioInput}
+            ref={audioRef}
           />
-          {previewImg ? (
-            <img
-              src={previewImg}
-              alt="Preview"
+          {previewAudio ? (
+            <audio
+              src={previewAudio}
+              controls
+              preload="auto"
               className="h-full w-full object-cover object-center rounded-md"
-            />
+            ></audio>
           ) : (
-            <BiImageAdd className="text-9xl" />
+            <div className="text-9xl">
+              <FaFileAudio className="text-9xl" />
+            </div>
           )}
         </label>
         <label htmlFor="name" className="block">
-          Name
+          Episode name
         </label>
         <input
           type="text"
@@ -155,7 +164,7 @@ const Dashboard = () => {
           className="rounded-lg border-2 border-primaryDark p-2"
         />
         <label htmlFor="description" className="block">
-          Description
+          Episode description
         </label>
         <textarea
           id="description"
@@ -165,42 +174,15 @@ const Dashboard = () => {
           required
           className="rounded-lg border-2 border-primaryDark p-2"
         />
-        <label htmlFor="tagLine" className="block">
-          Tag Line
-        </label>
-        <input
-          type="text"
-          id="tagLine"
-          name="tagLine"
-          value={formData.tagLine}
-          onChange={handleInputChange}
-          required
-          className="rounded-lg border-2 border-primaryDark p-2"
-        />
-        <label htmlFor="category" className="block">
-          Category
-        </label>
-        <select
-          id="category"
-          name="category"
-          value={formData.category}
-          onChange={handleInputChange}
-          className="rounded-lg border-2 border-primaryDark p-2"
-        >
-          <option value="">Select a category</option>
-          <option value="category1">Category 1</option>
-          <option value="category2">Category 2</option>
-          <option value="category3">Category 3</option>
-        </select>
         <button
           className="rounded-lg border-2 border-primaryDark p-2"
           type="submit"
         >
-          Submit
+          add episode to podcast
         </button>
       </form>
     </div>
   );
 };
 
-export default Dashboard;
+export default AddEpisode;

@@ -4,7 +4,7 @@ const PodcastCard = ({ data }) => {
   const navigate = useNavigate();
   return (
     <div
-      onClick={() => navigate(`${data.id}`)}
+      onClick={() => navigate(`/podcasts/${data.id}`)}
       className="mx-auto font-primary cursor-pointer bg-[#006845] flex gap-6 p-4 rounded-lg w-[min(90%,600px)] border-r-3 border-b-3 border-b-4 border-l-2 border-t-2 border-r-4 border-black m-2 max-[500px]:flex-col"
     >
       <img
