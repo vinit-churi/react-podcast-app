@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "@app/features/authSlice";
 import { MdAddBox } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import EpisodeCard from "@components/EpisodeCard";
 const PodcastDetail = () => {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
@@ -69,6 +70,19 @@ const PodcastDetail = () => {
         <h2 className="font-primary text-4xl text-center my-4">
           Available Episodes
         </h2>
+        <div className="mx-5">
+          {data ? (
+            data.episodes.map((episode, index) => (
+              <EpisodeCard
+                data={episode}
+                key={episode.id}
+                index={index < 10 ? `0${index}` : `${index}`}
+              />
+            ))
+          ) : (
+            <p>loading...</p>
+          )}
+        </div>
       </div>
     </div>
   );
