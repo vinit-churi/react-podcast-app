@@ -87,11 +87,11 @@ const PodcastDetail = () => {
           {data && data.podcast.description}
         </p>
         <div className="flex justify-center items-center gap-4 mt-4">
-          {subscriptionQueryLoading ? (
+          {subscriptionQueryLoading && user ? (
             <button className="bg-primary hover:scale-110 ease-in-out duration-300 text-white px-4 py-2 rounded-lg max-[800px]:mb-6">
               <AiOutlineLoading3Quarters className="animate-spin" />
             </button>
-          ) : subscriptions && subscriptions.includes(podcastId) ? (
+          ) : subscriptions && user && subscriptions.includes(podcastId) ? (
             <button
               onClick={handleRemoveFromSubscription}
               className="bg-primary hover:scale-110 ease-in-out duration-300 text-white px-4 py-2 rounded-lg  max-[800px]:mb-6"
