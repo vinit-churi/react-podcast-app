@@ -11,6 +11,7 @@ import { selectUser } from "@app/features/authSlice";
 import { MdAddBox } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import EpisodeCard from "@components/EpisodeCard";
+import notify from "@utils/notify";
 const PodcastDetail = () => {
   const navigate = useNavigate();
   const user = useSelector(selectUser);
@@ -25,6 +26,9 @@ const PodcastDetail = () => {
     useRemovePodcastFromSubscriptionMutation();
   const [addToSubscription] = useAddToSubscriptionMutation();
   async function handleAddToSubscription() {
+    if (!user) {
+      return notify("Please login to subscribe", "❗");
+    }
     try {
       await addToSubscription({ userId: user.uid, podcastId: podcastId });
       refetch();
