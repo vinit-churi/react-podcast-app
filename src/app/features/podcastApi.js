@@ -11,6 +11,7 @@ import {
   updateDoc,
   arrayRemove,
   arrayUnion,
+  setDoc,
 } from "firebase/firestore";
 export const podcastApi = createApi({
   reducerPath: "podcast",
@@ -111,6 +112,30 @@ export const podcastApi = createApi({
       },
       providesTags: ["Podcasts"],
     }),
+    getMultiplePodcasts: builder.query({
+      queryFn: async (podcastIds) => {
+        const data = [];
+        try {
+          const docRef = collection(db, "podcasts");
+          const podcastQuery = query(
+            docRef,
+            where("__name__", "in", podcastIds)
+          );
+          const querySnapshot = await getDocs(podcastQuery);
+          querySnapshot.forEach((doc) => {
+            data.push({ id: doc.id, ...doc.data() });
+          });
+        } catch (error) {
+          return { error: error.message };
+        }
+        return { data: data };
+      },
+      transformResponse: (response) => {
+        console.log(response, "this is the response");
+        return response.data;
+      },
+      providesTags: ["Podcasts"],
+    }),
     getUserPodcasts: builder.query({
       queryFn: async (userId) => {
         try {
@@ -155,7 +180,9 @@ export const podcastApi = createApi({
       providesTags: ["Podcasts"],
     }),
     addToSubscription: builder.mutation({
-      queryFn: async (userId, podcastId) => {
+      queryFn: async (data) => {
+        const { userId, podcastId } = data;
+        console.log(data, "is this running again");
         try {
           const docRef = doc(db, "users", userId);
           const docSnap = await getDoc(docRef);
@@ -163,11 +190,13 @@ export const podcastApi = createApi({
             await updateDoc(docRef, {
               subscriptions: arrayUnion(podcastId),
             });
+            return { data: "success" };
           } else {
             const docRef = doc(db, "users", userId);
-            await addDoc(docRef, {
+            await setDoc(docRef, {
               subscriptions: [podcastId],
             });
+            return { data: "success" };
           }
         } catch (error) {
           return { error: error.message };
@@ -180,7 +209,7 @@ export const podcastApi = createApi({
       invalidatesTags: ["subscriptions"],
     }),
     removePodcastFromSubscription: builder.mutation({
-      queryFn: async (userId, podcastId) => {
+      queryFn: async ({ userId, podcastId }) => {
         try {
           const docRef = doc(db, "users", userId);
           const docSnap = await getDoc(docRef);
@@ -188,6 +217,8 @@ export const podcastApi = createApi({
             await updateDoc(docRef, {
               subscriptions: arrayRemove(podcastId),
             });
+            console.log("podcast removed");
+            return { data: "success" };
           } else {
             return { error: "No subscriptions found" };
           }
@@ -231,4 +262,5 @@ export const {
   useAddToSubscriptionMutation,
   useRemovePodcastFromSubscriptionMutation,
   useGetPodcastEpisodesQuery,
+  useGetMultiplePodcastsQuery,
 } = podcastApi;

@@ -1,5 +1,11 @@
 import { useParams } from "react-router-dom";
-import { useGetPodcastQuery } from "@app/features/podcastApi";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import {
+  useGetPodcastQuery,
+  useGetUserSubscriptionsQuery,
+  useRemovePodcastFromSubscriptionMutation,
+  useAddToSubscriptionMutation,
+} from "@app/features/podcastApi";
 import { useSelector } from "react-redux";
 import { selectUser } from "@app/features/authSlice";
 import { MdAddBox } from "react-icons/md";
@@ -10,16 +16,35 @@ const PodcastDetail = () => {
   const user = useSelector(selectUser);
   const { podcastId } = useParams();
   const { data, isLoading } = useGetPodcastQuery(podcastId);
-  console.log(data, isLoading);
-  if (user) {
-    console.log(
-      user.uid === data?.podcast.createdBy,
-      user.uid,
-      data?.podcast.createdBy
-    );
+  const {
+    data: subscriptions,
+    isLoading: subscriptionQueryLoading,
+    refetch,
+  } = useGetUserSubscriptionsQuery(user?.uid);
+  const [removePodcastFromSubscription] =
+    useRemovePodcastFromSubscriptionMutation();
+  const [addToSubscription] = useAddToSubscriptionMutation();
+  async function handleAddToSubscription() {
+    try {
+      await addToSubscription({ userId: user.uid, podcastId: podcastId });
+      refetch();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function handleRemoveFromSubscription() {
+    try {
+      await removePodcastFromSubscription({
+        userId: user.uid,
+        podcastId: podcastId,
+      });
+      refetch();
+    } catch (error) {
+      console.log(error);
+    }
   }
   return (
-    <div className="min-h-screen grid grid-cols-[350px_auto] max-[930px]:grid-cols-[300px_auto] max-[800px]:grid-cols-[100%]">
+    <div className="min-h-screen grid grid-cols-[350px_auto] max-[930px]:grid-cols-[300px_auto] max-[800px]:grid-cols-[100%] ">
       <div className="bg-secondary">
         {user && user.uid === data?.podcast.createdBy && (
           <button
@@ -58,19 +83,32 @@ const PodcastDetail = () => {
           {data && data.podcast.description}
         </p>
         <div className="flex justify-center items-center gap-4 mt-4">
-          <button className="bg-primary hover:scale-110 ease-in-out duration-300 text-white px-4 py-2 rounded-lg max-[800px]:mb-6">
-            Subscribe
-          </button>
-          {/* <button className="bg-primary hover:scale-110 ease-in-out duration-300 text-white px-4 py-2 rounded-lg">
-            Unsubscribe
-          </button> */}
+          {subscriptionQueryLoading ? (
+            <button className="bg-primary hover:scale-110 ease-in-out duration-300 text-white px-4 py-2 rounded-lg max-[800px]:mb-6">
+              <AiOutlineLoading3Quarters className="animate-spin" />
+            </button>
+          ) : subscriptions && subscriptions.includes(podcastId) ? (
+            <button
+              onClick={handleRemoveFromSubscription}
+              className="bg-primary hover:scale-110 ease-in-out duration-300 text-white px-4 py-2 rounded-lg  max-[800px]:mb-6"
+            >
+              Unsubscribe
+            </button>
+          ) : (
+            <button
+              onClick={handleAddToSubscription}
+              className="bg-primary hover:scale-110 ease-in-out duration-300 text-white px-4 py-2 rounded-lg max-[800px]:mb-6"
+            >
+              Subscribe
+            </button>
+          )}
         </div>
       </div>
       <div>
         <h2 className="font-primary text-4xl text-center my-4">
           Available Episodes
         </h2>
-        <div className="mx-5">
+        <div className="mx-5 min-h-[calc(100vh-200px)]">
           {data ? (
             data.episodes.map((episode, index) => (
               <EpisodeCard

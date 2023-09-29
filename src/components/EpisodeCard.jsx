@@ -1,7 +1,7 @@
 const EpisodeCard = ({ data, index }) => {
   return (
-    <div className="flex @container flex-wrap font-primary mx-auto w-[min(90%,700px)] rounded-lg p-4 gap-4 border-r-3 border-b-3 border-b-4 border-l-2 border-t-2 border-r-4 border-black">
-      <div className="flex-[0_1_100%] @[516px]:flex-[0_1_40%] gap-2 relative rounded-lg">
+    <div className="flex @container flex-wrap font-primary mx-auto w-[min(90%,700px)] rounded-lg p-4 gap-4 border-r-3 border-b-3 border-b-4 border-l-2 border-t-2 border-r-4 border-black mb-2">
+      <div className="flex-[0_0_100%] @[516px]:flex-[0_0_40%] gap-2 relative rounded-lg">
         <img
           src={data.image}
           alt=""
@@ -11,7 +11,7 @@ const EpisodeCard = ({ data, index }) => {
           {index}
         </div>
       </div>
-      <div className="flex-[0_1_100%] grid grid-cols-[100%] grid-rows-[max-content_max-content_auto]">
+      <div className="flex-[0_0_100%] @[516px]:flex-[0_0_55%] grid grid-cols-[100%] grid-rows-[max-content_max-content_auto]">
         <h1 className="text-3xl my-2">{data.name}</h1>
         <p className="text-lg mb-2 text-slate-400">{data.description}</p>
         <audio

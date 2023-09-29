@@ -22,8 +22,6 @@ const Podcasts = () => {
             ))}
           </>
         )}
-
-        {/* loading  */}
       </div>
     </div>
   );

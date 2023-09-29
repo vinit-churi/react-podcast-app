@@ -147,15 +147,16 @@ const AddEpisode = () => {
         <div className="flex flex-wrap gap-2">
           <label
             htmlFor="audio"
-            className={`h-52 flex-[1_1_45%] flex items-center justify-center relative before:hidden hover:before:flex bg-greenTint rounded-md cursor-pointer ${
-              previewAudio &&
-              "before:bg-secondary/75 flex-[1_1_100%] mb-2  h-[56px] self-end rounded-bl-3xl rounded-br-3xl before:absolute before:bg-primaryDark before:text-white before:font-bold before:text-2xl before:items-center before:justify-center before:rounded-md before:h-full before:w-full before:cursor-pointer before:font-primary before:content-['']"
+            className={`h-52 flex items-center justify-center relative before:hidden hover:before:flex bg-greenTint rounded-md cursor-pointer ${
+              previewAudio
+                ? "before:bg-secondary/75 flex-[1_0_100%] mb-2  h-[56px] self-end rounded-bl-3xl rounded-br-3xl before:absolute before:bg-primaryDark before:text-white before:font-bold before:text-2xl before:items-center before:justify-center before:rounded-md before:h-full before:w-full before:cursor-pointer before:font-primary before:content-['']"
+                : "flex-[1_1_45%]"
             } `}
           >
             {previewAudio && (
               <button
                 type="button"
-                className={`absolute top-0 bottom-0 my-auto right-[-50px] bg-primaryDark/75 rounded-full p-1 m-1 ${"bg-red"}`}
+                className={`absolute top-0 bottom-0 my-auto right-[-50px] bg-primaryDark/75 rounded-full p-1 m-1 ${"cursor-pointer"}`}
                 onClick={handleRemoveButtonClick}
               >
                 <RiDeleteBin6Fill className="text-red-500 text-2xl" />
@@ -186,10 +187,11 @@ const AddEpisode = () => {
           </label>
           <label
             htmlFor="image"
-            className={`h-52 flex-[1_1_45%] flex items-center justify-center relative before:hidden hover:before:flex bg-greenTint rounded-md cursor-pointer ${
-              previewImg &&
-              "before:bg-secondary/75 flex-[1_1_100%] before:absolute before:bg-primaryDark before:text-white before:font-bold before:text-2xl before:items-center before:justify-center before:rounded-md before:h-full before:w-full before:cursor-pointer before:font-primary before:content-['']"
-            } `}
+            className={`h-52  flex items-center justify-center relative before:hidden hover:before:flex bg-greenTint rounded-md cursor-pointer ${
+              previewImg
+                ? "before:bg-secondary/75 flex-[1_0_100%] before:absolute before:bg-primaryDark before:text-white before:font-bold before:text-2xl before:items-center before:justify-center before:rounded-md before:h-full before:w-full before:cursor-pointer before:font-primary before:content-['']"
+                : "flex-[1_1_45%]"
+            }`}
           >
             {previewImg && (
               <button
